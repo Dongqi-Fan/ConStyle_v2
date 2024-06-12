@@ -1,0 +1,95 @@
+name: test_ConStyleNAFNetDeblur
+suffix: ~
+model_type: IRConStyle
+crop_border: ~
+num_gpu: 1
+gpu_id: 6
+manual_seed: 0
+test: True
+
+datasets:
+  test_01:
+    name: Part_GoPro
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_small/blur_small/hq
+    dataroot_lq: /root/data/Test_small/blur_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_2:
+    name: GoPro
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/Gopro/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/Gopro/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_3:
+    name: HIDE
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/HIDE/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/HIDE/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_4:
+    name: RealBlur_J
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/RealBlur_J/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/RealBlur_J/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_5:
+    name: RealBlur_R
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/RealBlur_R/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/RealBlur_R/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+network_g:
+  type: ConStyleNAFNet
+
+val:
+  save_img: false
+
+  metrics:
+    psnr_rgb:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: False
+
+    ssim_rgb:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: False
+
+    psnr_y:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: True
+
+    ssim_y:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: True
+
+save_img: false
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+
+

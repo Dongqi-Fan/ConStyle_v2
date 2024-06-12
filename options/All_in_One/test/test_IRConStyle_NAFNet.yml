@@ -1,0 +1,437 @@
+name: test_IRConStyle_NAFNet
+model_type: IRConStyle
+crop_border: ~
+num_gpu: 1
+gpu_id: 4
+manual_seed: 0
+test: True
+pretraining: False
+
+datasets:
+  test_01:
+    name: GoPro
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_small/blur_small/hq
+    dataroot_lq: /root/data/Test_small/blur_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_02:
+    name: SOTS
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_small/haze_small/hq
+    dataroot_lq: /root/data/Test_small/haze_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_03:
+    name: Rain
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_small/rain_small/hq
+    dataroot_lq: /root/data/Test_small/rain_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_04:
+    name: CBSD68
+    type: Dataset_GaussianDenoising
+    sigma_test: 25
+    in_ch: 3
+    dataroot_gt: /root/data/Test_small/noise_small
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_05:
+    name: LIVE1
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_small/jpeg_full/hq
+    dataroot_lq: /root/data/Test_small/jpeg_full/lq/20
+    filename_tmpl: { }
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_06:
+    name: LOL1
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_small/enhancement_full_lol1/hq
+    dataroot_lq: /root/data/Test_small/enhancement_full_lol1/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_07:
+    name: Defocus
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_small/defocus_small/hq
+    dataroot_lq: /root/data/Test_small/defocus_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_08:
+    name: Snow
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_small/snow_small/hq
+    dataroot_lq: /root/data/Test_small/snow_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_09:
+    name: Blur_GoPro
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/Gopro/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/Gopro/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_10:
+    name: Blur_HIDE
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/HIDE/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/HIDE/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_11:
+    name: Blur_RealBlur_J
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/RealBlur_J/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/RealBlur_J/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_12:
+    name: Blur_RealBlur_R
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Motion_Blur/RealBlur_R/target
+    dataroot_lq: /root/data/Test_all/Motion_Blur/RealBlur_R/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_13:
+    name: Haze_SOTS
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_all/Haze/outdoor/gt
+    dataroot_lq: /root/data/Test_all/Haze/outdoor/hazy
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_14:
+    name: Rain_Rain100H
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Rain/Rain100H/norain
+    dataroot_lq: /root/data/Test_all/Rain/Rain100H/rain
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_15:
+    name: Rain_Rain100L
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Rain/Rain100L/norain
+    dataroot_lq: /root/data/Test_all/Rain/Rain100L/rain
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+#  test_16:
+#    name: Rain_Test100
+#    type: Dataset_Paired
+#    dataroot_gt: /root/data/Test_all/Rain/Test100/label
+#    dataroot_lq: /root/data/Test_all/Rain/Test100/input
+#    filename_tmpl: '{}'
+#    io_backend:
+#      type: disk
+#    mod: 32
+
+  test_17:
+    name: Rain_Test1200
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Rain/Test1200/label
+    dataroot_lq: /root/data/Test_all/Rain/Test1200/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_18:
+    name: Rain_Test2800
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_all/Rain/Test2800/label
+    dataroot_lq: /root/data/Test_all/Rain/Test2800/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_19:
+    name: Noise_CBSD68_15
+    type: Dataset_GaussianDenoising
+    sigma_test: 15
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/CBSD68
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_20:
+    name: Noise_CBSD68_25
+    type: Dataset_GaussianDenoising
+    sigma_test: 25
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/CBSD68
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_21:
+    name: Noise_CBSD68_50
+    type: Dataset_GaussianDenoising
+    sigma_test: 50
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/CBSD68
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_22:
+    name: Noise_urban100_15
+    type: Dataset_GaussianDenoising
+    sigma_test: 15
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/urban100
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_23:
+    name: Noise_urban100_25
+    type: Dataset_GaussianDenoising
+    sigma_test: 25
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/urban100
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_24:
+    name: Noise_urban100_50
+    type: Dataset_GaussianDenoising
+    sigma_test: 50
+    in_ch: 3
+    dataroot_gt: /root/data/Test_all/Noise/urban100
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_25:
+    name: Enhancement_FiveK
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Low_Light/FiveK/test/target
+    dataroot_lq: /root/data/Test_all/Low_Light/FiveK/test/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_26:
+    name: Enhancement_LOL1
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Low_Light/LOLv1/Test/target
+    dataroot_lq: /root/data/Test_all/Low_Light/LOLv1/Test/input
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_27:
+    name: Enhancement_LOL2
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Low_Light/LOLv2/Synthetic/Test/Normal
+    dataroot_lq: /root/data/Test_all/Low_Light/LOLv2/Synthetic/Test/Low
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_28:
+    name: Defocus_DDDP
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_all/Defocus_Blur/DDDP/test_c/target
+    dataroot_lq: /root/data/Test_all/Defocus_Blur/DDDP/test_c/source
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_29:
+    name: Defocus_RealDOF
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Defocus_Blur/RealDOF/target
+    dataroot_lq: /root/data/Test_all/Defocus_Blur/RealDOF/source
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_30:
+    name: Snow_CSD
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Snow/CSD/Gt
+    dataroot_lq: /root/data/Test_all/Snow/CSD/Snow
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_31:
+    name: Snow_Snow100K-L
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Snow/Snow100K/Snow100K-L/gt
+    dataroot_lq: /root/data/Test_all/Snow/Snow100K/Snow100K-L/synthetic
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_32:
+    name: Snow_Snow100K-M
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Snow/Snow100K/Snow100K-M/gt
+    dataroot_lq: /root/data/Test_all/Snow/Snow100K/Snow100K-M/synthetic
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_33:
+    name: Snow_Snow100K-S
+    type: Dataset_Paired
+    dataroot_gt: /root/data/Test_all/Snow/Snow100K/Snow100K-S/gt
+    dataroot_lq: /root/data/Test_all/Snow/Snow100K/Snow100K-S/synthetic
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_34:
+    name: JPEG_LIVE1
+    type: Dataset_JPEG
+    quality_factor: 10
+    dataroot_gt: /root/data/Test_small/jpeg_full/hq
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_35:
+    name: JPEG_LIVE1
+    type: Dataset_JPEG
+    quality_factor: 20
+    dataroot_gt: /root/data/Test_small/jpeg_full/hq
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_36:
+    name: JPEG_LIVE1
+    type: Dataset_JPEG
+    quality_factor: 30
+    dataroot_gt: /root/data/Test_small/jpeg_full/hq
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_37:
+    name: JPEG_LIVE1
+    type: Dataset_JPEG
+    quality_factor: 40
+    dataroot_gt: /root/data/Test_small/jpeg_full/hq
+    dataroot_lq: ~
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+network_g:
+  type: ConStyleNAFNet
+
+val:
+  save_img: false
+  suffix: false
+
+  metrics:
+    psnr_rgb:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: False
+
+    ssim_rgb:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: False
+
+    psnr_y:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: True
+
+    ssim_y:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: True
+
+save_img: false
+
+# path
+path:      
+  pretrain_network_g: ~
+  pretrain_constyle: ~
+  strict_load_g: true
+  strict_load_constyle: true
+  resume_state: ~
+
+

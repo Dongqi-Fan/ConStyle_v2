@@ -1,0 +1,45 @@
+name: test_ConStyleRestormerDenoise
+suffix: ~
+model_type: Origin
+crop_border: ~
+num_gpu: 1
+gpu_id: 0
+manual_seed: 0
+test: True
+
+datasets:
+  test_1:
+    name: CBSD68
+    type: Dataset_GaussianDenoising
+    sigma_test: 25
+    in_ch: 1
+    dataroot_gt: C:/datasets/CBSD68
+    dataroot_lq: none
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+network_g:
+  type: Restormer
+
+val:
+  save_img: false
+
+  metrics:
+    psnr_y:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: True
+
+    ssim_y:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: True
+
+save_img: false
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+

@@ -1,0 +1,132 @@
+# TODO
+# general settings
+name: train_ConStyle_v2
+model_type: ConStyle_v2
+scale: 1
+manual_seed: 10
+num_gpu: 1
+gpu_id: 1
+
+datasets:
+  train:
+    name: ImageNet
+    type: Dataset_train_ImageNet
+    dataroot: /root/data/ImageNet/ImageNet/train
+    filename_tmpl: '{}'
+    pin_memory: True
+    io_backend:
+      type: disk
+    
+    scale: 1
+    resize_size: 256
+    crop_size: 224
+    num_worker_per_gpu: 32
+    batch_size_per_gpu: 32
+    dataset_enlarge_ratio: 1
+    prefetch_mode: cpu                     # cuda or cpu, when cuda: It may consume more GPU memory.
+    progressive_learning: False
+
+    real_esrgan:
+      # the first degradation process
+      resize_prob: [ 0.2, 0.7, 0.1 ]  # up, down, keep
+      resize_range: [ 0.15, 1.5 ]
+      gaussian_noise_prob: 0.5
+      noise_range: [ 1, 30 ]
+      poisson_scale_range: [ 0.05, 3 ]
+      gray_noise_prob: 0.4
+      jpeg_range: [ 30, 95 ]
+
+      # the second degradation process
+      second_blur_prob: 0.8
+      resize_prob2: [ 0.3, 0.4, 0.3 ]  # up, down, keep
+      resize_range2: [ 0.3, 1.2 ]
+      gaussian_noise_prob2: 0.5
+      noise_range2: [ 1, 25 ]
+      poisson_scale_range2: [ 0.05, 2.5 ]
+      gray_noise_prob2: 0.4
+      jpeg_range2: [ 30, 95 ]
+
+      blur_kernel_size: 21
+      kernel_list: [ 'iso', 'aniso', 'generalized_iso', 'generalized_aniso', 'plateau_iso', 'plateau_aniso' ]
+      kernel_prob: [ 0.45, 0.25, 0.12, 0.03, 0.12, 0.03 ]
+      sinc_prob: 0.1
+      blur_sigma: [ 0.2, 3 ]
+      betag_range: [ 0.5, 4 ]
+      betap_range: [ 1, 2 ]
+
+      blur_kernel_size2: 21
+      kernel_list2: [ 'iso', 'aniso', 'generalized_iso', 'generalized_aniso', 'plateau_iso', 'plateau_aniso' ]
+      kernel_prob2: [ 0.45, 0.25, 0.12, 0.03, 0.12, 0.03 ]
+      sinc_prob2: 0.1
+      blur_sigma2: [ 0.2, 1.5 ]
+      betag_range2: [ 0.5, 4 ]
+      betap_range2: [ 1, 2 ]
+      final_sinc_prob: 0.8
+
+network_g:
+  type: ConStyle_v2
+
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+
+train:
+  total_iter: 400000
+  class_iter: 50000
+  kl_iter: 999999
+  warmup_iter: -1
+  ema_decay: 0.999
+
+  optim_g:
+    type: AdamW
+    lr: !!float 3e-4
+    weight_decay: !!float 1e-4
+    betas: [ 0.9, 0.999 ]
+
+  scheduler:
+    type: CosineAnnealingRestartCyclicLR
+    periods: [400000]
+    restart_weights: [1]
+    eta_mins: [0.0001]
+
+  mixing_augs:
+    mixup: false
+    mixup_beta: 1.2
+    use_identity: true
+  
+  CrossEntropy_opt:
+    type: CrossEntropyLoss
+
+  content_opt:
+    type: ContentLoss
+
+  style_opt:
+    type: StyleLoss
+
+val:
+  val_freq: 8000
+  save_img: false
+
+  metrics:
+    top1:
+      type: top1
+      crop_border: 0
+
+    top5:
+      type: top5
+      crop_border: 0
+
+# logging settings
+logger:
+  print_freq: 1000
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: False
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500

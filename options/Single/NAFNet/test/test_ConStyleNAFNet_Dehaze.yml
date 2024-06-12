@@ -1,0 +1,65 @@
+name: test_ConStyleNAFNetDehaze
+suffix: ~
+model_type: IRConStyle
+crop_border: ~
+num_gpu: 1
+gpu_id: 6
+manual_seed: 0
+test: True
+
+datasets:
+  test_1:
+    name: Part_SOTS
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_small/haze_small/hq
+    dataroot_lq: /root/data/Test_small/haze_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+  test_2:
+    name: SOTS
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_all/Haze/outdoor/gt
+    dataroot_lq: /root/data/Test_all/Haze/outdoor/hazy
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+network_g:
+  type: ConStyleNAFNet
+
+val:
+  save_img: false
+
+  metrics:
+    psnr_rgb:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: False
+
+    ssim_rgb:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: False
+
+    psnr_y:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: True
+
+    ssim_y:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: True
+
+save_img: false
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+
+

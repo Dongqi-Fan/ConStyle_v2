@@ -1,0 +1,115 @@
+# TODO
+# general settings
+name: train_IRConStyleRestormer
+model_type: IRConStyle
+
+manual_seed: 10
+num_gpu: 1
+gpu_id: 6
+
+datasets:
+  train:
+    name: Haze
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Haze/hq_
+    dataroot_lq: /root/data/Haze/lq
+    filename_tmpl: '{}'
+    pin_memory: True
+    io_backend:
+      type: disk
+
+    scale: 1
+    gt_size: 128
+    use_hflip: True
+    use_rot: True
+    num_worker_per_gpu: 8
+    batch_size_per_gpu: 8
+    dataset_enlarge_ratio: 1
+    prefetch_mode: cuda                     # cuda or cpu
+
+  val_1:
+    name: GoPro
+    type: Dataset_Non_Paired
+    dataroot_gt: /root/data/Test_small/haze_small/hq
+    dataroot_lq: /root/data/Test_small/haze_small/lq
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    mod: 32
+
+network_g:
+    type: ConStyleRestormer
+
+path:
+  pretrain_network_g: ~
+  pretrain_constyle: /root/constyle/experiments/Finally_All.pth
+  strict_load_g: true
+  strict_load_constyle: false
+  resume_state: ~
+
+train:
+  total_iter: 703632
+  ConStyle_iter: -1
+  warmup_iter: -1
+  ema_decay: 0.999
+
+  optim_g:
+    type: AdamW
+    lr: !!float 3e-4
+    weight_decay: !!float 1e-4
+    betas: [ 0.9, 0.999 ]
+
+  scheduler:
+    type: CosineAnnealingRestartCyclicLR
+    periods: [243312, 460320]
+    restart_weights: [1,1]
+    eta_mins: [0.0003,0.000001]
+
+  mixing_augs:
+    mixup: false
+    mixup_beta: 1.2
+    use_identity: true
+
+  # losses
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+
+  CrossEntropy_opt:
+    type: CrossEntropyLoss
+
+  content_opt:
+    type: ContentLoss
+
+  style_opt:
+    type: StyleLoss
+
+val:
+  val_freq: 8000
+  save_img: false
+
+  metrics:
+    psnr_y:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: True
+
+    psnr_rgb:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: False
+
+# logging settings
+logger:
+  print_freq: 1000
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: False
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
